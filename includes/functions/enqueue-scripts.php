@@ -36,13 +36,11 @@ function edd_custom_deliverables_admin_post_meta_scripts( $hook ) {
 
 	wp_enqueue_script( 'edd_custom_deliverables_admin_js', EDD_CUSTOM_DELIVERABLES_URL . 'assets/js/eddcd-admin-scripts' . $suffix . '.js', array( 'jquery' ) );
 
-	/*
 	wp_localize_script( 'edd_custom_deliverables_admin_js', 'edd_custom_deliverables_vars',
 		array(
-			'first_variation_string' => __( 'st Price Variation from each product', 'edd-all-access' ),
+			'save_payment_text' => '<h3>' . __( 'Notify Customer', 'edd-custom-deliverables' ) . '</h3><p>' . __( 'Since you have just modified the files, save the payment before notifying the customer. After saving, a notification tool will appear here.', 'edd-custom-deliverables' ) . '</p>',
 		)
 	);
-	*/
 
 	wp_enqueue_style( 'edd_custom_deliverables_admin_css', EDD_CUSTOM_DELIVERABLES_URL . 'assets/css/eddcd-admin' . $suffix . '.css' );
 

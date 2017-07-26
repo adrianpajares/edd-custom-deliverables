@@ -273,6 +273,9 @@ jQuery(document).ready(function ($) {
 
 				// Finally, open the modal
 				file_frame.open();
+
+				// We also want to remove the option to notify the customer now that the files have been mofieid. They must save the payment first.
+				$( '.edd-custom-deliverables-send-email-wrapper' ).html( edd_custom_deliverables_vars.save_payment_text );
 			});
 
 
