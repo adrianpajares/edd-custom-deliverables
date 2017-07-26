@@ -177,7 +177,7 @@ function edd_custom_deliverables() {
 	if ( version_compare( phpversion(), '5.3', '<' ) ){
 		echo __( 'You need to be running version 5.3 of PHP or later to use EDD Custom Deliverables. Contact your webhost to have them upgrade your PHP version' );
 	}
-	if ( ! defined( 'EDD_VERSION' ) || version_compare( EDD_VERSION, '2.7' ) <= 0 ){
+	if ( ! defined( 'EDD_VERSION' ) || version_compare( EDD_VERSION, '2.8' ) <= 0 ){
 		add_action( 'admin_notices', 'edd_custom_deliverables_edd_too_old_notice' );
 	}
 	if( ! class_exists( 'Easy_Digital_Downloads' ) ) {
@@ -194,14 +194,14 @@ function edd_custom_deliverables() {
 add_action( 'plugins_loaded', 'edd_custom_deliverables' );
 
 /**
-* Admin notice used if EDD is not updated to 2.6 or later.
+* Admin notice used if EDD is not updated to 2.8 or later.
 *
 * @since       1.0.0
 */
 function edd_custom_deliverables_edd_too_old_notice(){
   ?>
   <div class="notice notice-error">
-	<p><?php echo __( 'EDD Custom Deliverables: Your version of Easy Digital Downloads must be updated to version 2.7 or later to use the Custom Deliverables extension', 'edd-custom-deliverables' ); ?></p>
+	<p><?php echo __( 'EDD Custom Deliverables: Your version of Easy Digital Downloads must be updated to version 2.8 or later to use the Custom Deliverables extension', 'edd-custom-deliverables' ); ?></p>
   </div>
   <?php
 }
