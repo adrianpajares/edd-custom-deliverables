@@ -205,17 +205,3 @@ function edd_custom_deliverables_edd_too_old_notice(){
   </div>
   <?php
 }
-
-function check_form_id(){
-
-	$form_id = EDD()->session->get( 'FES_FILE_UPLOAD_FORMID' );
-
-	// If a form ID exists, log that form ID. This will happen if the file upload filter is successfully enabled.
-	if ( ! empty( $form_id ) ){
-		error_log( EDD()->session->get( 'FES_FILE_UPLOAD_FORMID' ) );
-	}else{
-		// This will happen if the file upload filter is disabled or incorrectly enabled without setting the Form ID.
-		error_log( 'Form ID was empty' );
-	}
-}
-add_action( 'init', 'check_form_id' );
