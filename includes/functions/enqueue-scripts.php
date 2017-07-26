@@ -34,7 +34,7 @@ function edd_custom_deliverables_admin_post_meta_scripts( $hook ) {
 	// Use minified libraries if SCRIPT_DEBUG is turned off
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	wp_enqueue_script( 'edd_custom_deliverables_admin_js', EDD_CUSTOM_DELIVERABLES_URL . 'assets/js/eddcd-admin-scripts' . $suffix . '.js', array( 'jquery' ) );
+	wp_enqueue_script( 'edd_custom_deliverables_admin_js', EDD_CUSTOM_DELIVERABLES_URL . 'assets/js/admin-eddcd-scripts' . $suffix . '.js', array( 'jquery' ) );
 
 	wp_localize_script( 'edd_custom_deliverables_admin_js', 'edd_custom_deliverables_vars',
 		array(
