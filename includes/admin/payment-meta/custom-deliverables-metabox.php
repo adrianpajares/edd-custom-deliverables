@@ -188,8 +188,8 @@ You can download them here: {download_list}', 'edd_custom_deliverables_body' ), 
 		$variable_display = $variable_pricing ? '' : ' style="display:none;"';
 		$variable_class   = $variable_pricing ? ' has-variable-pricing' : '';
 	?>
-		<div class="eddcd-repeatable-row-header">
-			<span class="eddcd-repeatable-row-title eddcd-draghandle-anchor" title="<?php _e( 'Click and drag to re-order files', 'edd-custom-deliverables' ); ?>">
+		<div class="eddcd-repeatable-row-header eddcd-draghandle-anchor">
+			<span class="eddcd-repeatable-row-title" title="<?php _e( 'Click and drag to re-order files', 'edd-custom-deliverables' ); ?>">
 				<?php printf( __( '%1$s file: %2$s', 'edd-custom-deliverables' ), edd_get_label_singular(), '<span class="eddcd_file_id">' . $key . '</span>' ); ?>
 				<input type="hidden" name="eddcd_custom_deliverables_custom_files[<?php echo $post_id; ?>][<?php echo $price_id; ?>][<?php echo $key; ?>][index]" class="eddcd_repeatable_index" value="<?php echo $index; ?>" />
 			</span>
