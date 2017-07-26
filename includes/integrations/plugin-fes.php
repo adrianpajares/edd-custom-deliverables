@@ -300,6 +300,10 @@ You can download them here: {custom_download_list}', 'edd_custom_deliverables_bo
 			return;
 		}
 
+		if ( empty( $custom_deliverables ) ){
+			$custom_deliverables = array();
+		}
+
 		// Get the files being saved as custom deliverables for this payment
 		$products = $_POST['eddcd_custom_deliverables_custom_files'];
 
@@ -380,8 +384,6 @@ You can download them here: {custom_download_list}', 'edd_custom_deliverables_bo
 
 				// Get the download if of this purchased product
 				$product_id = $cart_item['id'];
-
-				error_log( $product_id );
 
 				// Loop through each sanitized value
 				foreach( $sanitized_values as $sanitized_product_id => $sanitized_custom_deliverables_data ){
