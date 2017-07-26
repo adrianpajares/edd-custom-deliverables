@@ -208,6 +208,10 @@ jQuery(document).ready(function ($) {
 				});
 
 				downloadable_frame.open();
+
+				// We also want to remove the option to notify the customer now that the files have been modified. They must save the payment first.
+				$( '.edd-custom-deliverables-send-email-wrapper' ).html( edd_custom_deliverables_fes_vars.save_payment_text );
+
 			});
 		},
 
