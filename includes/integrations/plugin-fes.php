@@ -118,7 +118,7 @@ class EDD_Custom_Deliverables_Fes {
 						// Get the custom files attached to this payment for this product
 						$custom_download_files = isset( $custom_deliverables[$download_id][$price_id] ) ? $custom_deliverables[$download_id][$price_id] : array();
 
-						if ( ! empty( $custom_download_files ) ){
+						if ( ! empty( $custom_download_files ) && is_array( $custom_download_files ) ){
 							// Loop through the default files
 							foreach( $custom_download_files as $key => $value ){
 
