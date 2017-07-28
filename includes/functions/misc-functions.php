@@ -195,3 +195,26 @@ function edd_custom_deliverables_log_file_download_file_id( $file_id, $log ){
 	return $meta['_edd_log_file_id'][0];
 }
 add_filter( 'edd_log_file_download_file_id', 'edd_custom_deliverables_log_file_download_file_id', 10, 2 );
+
+
+/**
+ * Change Downloads Upload Directory on the Payment History page
+ *
+ * Hooks the edd_set_upload_dir filter when appropriate. This function works by
+ * hooking on the WordPress Media Uploader and moving the uploading files that
+ * are used for EDD to an edd directory under wp-content/uploads/ therefore,
+ * the new directory is wp-content/uploads/edd/{year}/{month}. This directory is
+ * provides protection to anything uploaded to it.
+ *
+ * @since 1.0
+ * @global $pagenow
+ * @return void
+ */
+function eddcd_change_downloads_upload_dir() {
+
+	if ( 'view-order-details' == $_GET['view'] ) {
+		edd_create_protection_files( true );
+		add_filter( 'upload_dir', 'edd_set_upload_dir' );
+	}
+}
+add_action( 'admin_init', 'eddcd_change_downloads_upload_dir', 999 );
