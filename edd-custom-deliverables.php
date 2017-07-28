@@ -178,9 +178,10 @@ function edd_custom_deliverables() {
 		echo __( 'You need to be running version 5.3 of PHP or later to use EDD Custom Deliverables. Contact your webhost to have them upgrade your PHP version' );
 	}
 
-	if ( ! defined( 'EDD_VERSION' ) || version_compare( EDD_VERSION, '2.8' ) == -1 ){
+	if ( ! defined( 'EDD_VERSION' ) || version_compare( EDD_VERSION, '2.8', '<' ) ){
 		add_action( 'admin_notices', 'edd_custom_deliverables_edd_too_old_notice' );
 	}
+	
 	if( ! class_exists( 'Easy_Digital_Downloads' ) ) {
 		if( ! class_exists( 'EDD_Extension_Activation' ) ) {
 		  require_once 'includes/updates/class.extension-activation.php';
