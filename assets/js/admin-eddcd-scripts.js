@@ -196,6 +196,9 @@ jQuery(document).ready(function ($) {
 
 				window.formfield = $(this).closest('.eddcd_repeatable_upload_wrapper');
 
+				// Turn on the file upload filter for edd_cd
+				$.post(ajaxurl,{ action:'edd_cd_turn_on_file_filter' }, function (res) { });
+
 				// If the media frame already exists, reopen it.
 				if ( file_frame ) {
 					//file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
@@ -269,6 +272,9 @@ jQuery(document).ready(function ($) {
 							clone.insertAfter( row );
 						}
 					});
+
+					// Turn off the file upload filter for edd_cd
+					$.post(ajaxurl,{ action:'edd_cd_turn_off_file_filter' }, function (res) { });
 				});
 
 				// Finally, open the modal
