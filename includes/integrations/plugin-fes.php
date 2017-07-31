@@ -46,7 +46,7 @@ class EDD_Custom_Deliverables_Fes {
 		// Use minified libraries if SCRIPT_DEBUG is turned off
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		wp_enqueue_script( 'edd_custom_deliverables_fes_js', EDD_CUSTOM_DELIVERABLES_URL . 'assets/js/eddcd-fes-integration' . $suffix . '.js', array( 'jquery' ) );
+		wp_enqueue_script( 'edd_custom_deliverables_fes_js', EDD_CUSTOM_DELIVERABLES_URL . 'assets/js/eddcd-fes-integration' . $suffix . '.js', array( 'jquery', 'jquery-ui-sortable' ) );
 
 		wp_localize_script( 'edd_custom_deliverables_fes_js', 'edd_custom_deliverables_fes_vars',
 			array(
@@ -181,8 +181,9 @@ class EDD_Custom_Deliverables_Fes {
 					<?php $notify_button_text = __( 'Notify Customer', 'edd-custom-deliverables' ); ?><button class="button" id="edd-custom-deliverables-email-customer" data-payment="<?php echo $payment_id; ?>"><?php echo $notify_button_text; ?></button>
 					<span class="spinner"></span>
 				</p>
-				<?php wp_nonce_field( 'edd-custom-deliverables-send-email', 'edd-custom-deliverables-send-email', false, true ); ?>
-				<input type="hidden" id="edd-custom-deliverables-payment-id" name="edd-custom-deliverables-payment-id" value="<?php echo $payment_id; ?>">
+					<?php wp_nonce_field( 'edd-custom-deliverables-send-email', 'edd-custom-deliverables-send-email', false, true ); ?>
+					<input type="hidden" id="edd-custom-deliverables-payment-id" name="edd-custom-deliverables-payment-id" value="<?php echo $payment_id; ?>" />
+					<input type="hidden" id="edd-custom-deliverables-vendor-id" name="edd-custom-deliverables-vendor-id" value="<?php echo $vendor->id; ?>" />
 				</p>
 				<div class="clear"></div>
 			</div>
@@ -558,7 +559,7 @@ class EDD_Custom_Deliverables_Fes {
 
 		global $edd_custom_deliverable_ajax_email_payment_id;
 
-		if ( ! isset( $_POST['payment_id'] ) || ! isset( $_POST['nonce'] ) ){
+		if ( ! isset( $_POST['payment_id'] ) || ! isset( $_POST['nonce'] ) || ! isset( $_POST['vendor_id'] ) ){
 			echo json_encode( array(
 				'success' => false,
 				'failure_code' => 'data_missing',
@@ -582,6 +583,9 @@ class EDD_Custom_Deliverables_Fes {
 
 		// Get the Payment ID
 		$payment_id = intval( $_POST['payment_id'] );
+
+		// Get the Vendor object
+		$vendor = new FES_Vendor( $_POST['vendor_id'] );
 
 		// Set up the subject and header
 		$default_message = $this->default_email_message();
@@ -641,7 +645,7 @@ class EDD_Custom_Deliverables_Fes {
 			) );
 
 			// Add a note to the payment indiciating that the email was sent
-			edd_insert_payment_note( $payment_id, __( 'Customer was sent email to notify them of custom deliverables being available.', 'edd-custom-deliverables' ) );
+			edd_insert_payment_note( $payment_id, __( 'Customer was sent email to notify them of custom deliverables being available by Vendor: ', 'edd-custom-deliverables' ) . $vendor->name  );
 		}
 
 		die();

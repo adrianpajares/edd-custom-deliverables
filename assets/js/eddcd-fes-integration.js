@@ -234,6 +234,7 @@ jQuery(document).ready(function ($) {
 	 		data: {
 	 			nonce: $( '#edd-custom-deliverables-send-email' ).val(),
 				payment_id: $( '#edd-custom-deliverables-payment-id' ).val(),
+				vendor_id: $( '#edd-custom-deliverables-vendor-id' ).val(),
 	 			action: 'edd_custom_deliverables_send_fes_email_ajax',
 	 		},
 	 		dataType: "json",
