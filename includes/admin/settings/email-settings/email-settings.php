@@ -42,7 +42,7 @@ function edd_custom_deliverables_email_settings( $settings ) {
 			'size' => 'regular',
 		),
 		array(
-			'id'          => 'custom_deliverables_subject',
+			'id'          => 'custom_deliverables_email_subject',
 			'name'        => __( 'Email Subject Line', 'edd-custom-deliverables' ),
 			'desc'        => __( 'The subject line used when sending a notification to customers that their customized files are ready to download.','edd-custom-deliverables' ),
 			'type'        => 'text',
@@ -50,7 +50,7 @@ function edd_custom_deliverables_email_settings( $settings ) {
 			'std'         => __( 'Your files are ready!', 'edd-custom-deliverables' ),
 		),
 		array(
-			'id'          => 'custom_deliverables_email',
+			'id'          => 'custom_deliverables_email_body',
 			'name'        => __( 'Email', 'edd-custom-deliverables' ),
 			'desc'        => __( 'Enter the text that is used when sending a notification to customers that their files are ready. HTML is accepted. Available template tags:','edd-custom-deliverables' ) . '<br/>' . edd_get_emails_tags_list(),
 			'type'        => 'rich_editor',

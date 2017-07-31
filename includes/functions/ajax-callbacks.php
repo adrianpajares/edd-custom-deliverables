@@ -48,9 +48,9 @@ function edd_custom_deliverables_send_email_ajax(){
 	// Set up the subject and header
 	$default_message = edd_custom_deliverables_default_email_message();
 
-	$subject      = edd_get_option( 'custom_deliverables_subject', __( 'Your files are ready!', 'edd-custom-deliverables' ) );
+	$subject      = edd_get_option( 'custom_deliverables_email_subject', __( 'Your files are ready!', 'edd-custom-deliverables' ) );
 	$heading      = $subject;
-	$message      = edd_get_option( 'custom-deliverables_email', '' );
+	$message      = edd_get_option( 'custom_deliverables_email_body', '' );
 
 	if ( empty( $message ) ){
 		$message = $default_message;
