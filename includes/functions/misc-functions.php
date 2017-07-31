@@ -196,7 +196,6 @@ function edd_custom_deliverables_log_file_download_file_id( $file_id, $log ){
 }
 add_filter( 'edd_log_file_download_file_id', 'edd_custom_deliverables_log_file_download_file_id', 10, 2 );
 
-
 /**
  * Change Downloads Upload Directory on the Payment History page
  *
