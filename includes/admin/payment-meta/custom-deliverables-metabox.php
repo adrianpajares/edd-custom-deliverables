@@ -127,6 +127,7 @@ class EDD_Custom_Deliverables_MetaBox {
 							</div>
 						</div>
 					</div>
+					<?php do_action( 'edd_custom_deliverables_after_files_area', $payment ); ?>
 					<div class="edd-custom-deliverables-send-email-wrapper edd-admin-box-inside">
 						<h3><?php echo __( 'Notify Customer', 'edd-customized-deliverables' ); ?></h3>
 						<p>
