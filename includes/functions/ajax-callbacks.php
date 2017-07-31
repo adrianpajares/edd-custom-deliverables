@@ -20,7 +20,7 @@ function edd_custom_deliverables_send_email_ajax(){
 
 	global $edd_custom_deliverable_ajax_email_payment_id;
 
-	if ( ! isset( $_POST['payment_id'] ) || ! isset( $_POST['nonce'] ) || ! isset( $_POST['subject'] ) || ! isset( $_POST['body'] ) ){
+	if ( ! isset( $_POST['payment_id'] ) || ! isset( $_POST['nonce'] ) ){
 		echo json_encode( array(
 			'success' => false,
 			'failure_code' => 'data_missing',
@@ -42,16 +42,25 @@ function edd_custom_deliverables_send_email_ajax(){
 		die();
 	}
 
-	// Get the details for the email from the $_POST
+	// Get the Payment ID
 	$payment_id = intval( $_POST['payment_id'] );
-	$subject    = sanitize_text_field( $_POST['subject'] );
-	$heading    = $subject;
+
+	// Set up the subject and header
+	$default_message = edd_custom_deliverables_default_email_message();
+
+	$subject      = edd_get_option( 'custom_deliverables_email_subject', __( 'Your files are ready!', 'edd-custom-deliverables' ) );
+	$heading      = $subject;
+	$message      = edd_get_option( 'custom_deliverables_email_body', '' );
+
+	if ( empty( $message ) ){
+		$message = $default_message;
+	}
 
 	// Globalize the payment_id so we can use it in other functions that we'll run during this ajax function
 	$edd_custom_deliverable_ajax_email_payment_id = $payment_id;
 
 	// Set up the message for the email
-	$body = stripslashes( edd_sanitize_text_field( $_POST['body'] ) );
+	$body = stripslashes( edd_sanitize_text_field( $message ) );
 	$body = EDD()->email_tags->do_tags( $body, $payment_id );
 
 	// Set up data for email
@@ -101,7 +110,6 @@ function edd_custom_deliverables_send_email_ajax(){
 
 }
 add_action( 'wp_ajax_edd_custom_deliverables_send_email_ajax', 'edd_custom_deliverables_send_email_ajax' );
-add_action( 'wp_ajax_no_priv_edd_custom_deliverables_send_email_ajax', 'edd_custom_deliverables_send_email_ajax' );
 
 /**
  * Turn on the file upload filter which tells files to upload to the edd directory

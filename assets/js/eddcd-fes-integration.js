@@ -227,25 +227,15 @@ jQuery(document).ready(function ($) {
 		$( '.edd-custom-deliverables-send-email-wrapper .spinner' ).css( 'visibility', 'visible' );
 		$( '#edd-custom-deliverables-email-customer' ).css( 'display', 'none' );
 
-		var body;
-
-		// Get the body contents
-		if ( $( "#wp-edd-custom-deliverables-email-body-wrap" ).hasClass( "tmce-active" ) ) {
-	        body = tinyMCE.activeEditor.getContent();
-	    } else {
-	        body = jQuery('#edd-custom-deliverables-email-body').val();
-	    }
-
 		// Send the email via ajax
 	 	$.ajax( {
 	 		type: 'POST',
-	 		url: ajaxurl,
+	 		url: fes_form.ajaxurl,
 	 		data: {
 	 			nonce: $( '#edd-custom-deliverables-send-email' ).val(),
-	 			subject: $( '#edd-custom-deliverables-subject' ).val(),
-	 			body: body,
 				payment_id: $( '#edd-custom-deliverables-payment-id' ).val(),
-	 			action: 'edd_custom_deliverables_send_email_ajax',
+				vendor_id: $( '#edd-custom-deliverables-vendor-id' ).val(),
+	 			action: 'edd_custom_deliverables_send_fes_email_ajax',
 	 		},
 	 		dataType: "json",
 	 		success: function( response ) {

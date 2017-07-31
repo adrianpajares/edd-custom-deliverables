@@ -3,7 +3,7 @@
 * Plugin Name:     Easy Digital Downloads - Custom Deliverables
 * Plugin URI:      http://easydigitaldownloads.com/downloads/custom-deliverables/
 * Description:     This extension makes it possible to deliver custom files to clients at a later time after they purchase. Perfect for freelancers or freelancing marketplaces like fiverr.com
-* Version:         1.0.1
+* Version:         1.0.0
 * Author:          Phil Johnston
 * Author URI:      https://mintplugins.com
 * Text Domain:     edd_custom_deliverables
@@ -103,6 +103,9 @@ if( !class_exists( 'EDD_Custom_Deliverables' ) ) {
 	  // Include Post Meta options
 	  require_once EDD_CUSTOM_DELIVERABLES_DIR . 'includes/admin/payment-meta/custom-deliverables-metabox.php';
 
+	  // Include global email settings
+	  require_once EDD_CUSTOM_DELIVERABLES_DIR . 'includes/admin/settings/email-settings/email-settings.php';
+
 	  // Integration with FES
 	  require_once EDD_CUSTOM_DELIVERABLES_DIR . 'includes/integrations/plugin-fes.php';
 
@@ -181,7 +184,7 @@ function edd_custom_deliverables() {
 	if ( ! defined( 'EDD_VERSION' ) || version_compare( EDD_VERSION, '2.8', '<' ) ){
 		add_action( 'admin_notices', 'edd_custom_deliverables_edd_too_old_notice' );
 	}
-	
+
 	if( ! class_exists( 'Easy_Digital_Downloads' ) ) {
 		if( ! class_exists( 'EDD_Extension_Activation' ) ) {
 		  require_once 'includes/updates/class.extension-activation.php';
