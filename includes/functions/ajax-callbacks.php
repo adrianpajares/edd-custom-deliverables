@@ -10,6 +10,12 @@
 // Exit if accessed directly
 if( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Send the custom deliverables email via ajax
+ *
+ * @since 1.0
+ * @return void
+ */
 function edd_custom_deliverables_send_email_ajax(){
 
 	global $edd_custom_deliverable_ajax_email_payment_id;
@@ -96,3 +102,25 @@ function edd_custom_deliverables_send_email_ajax(){
 }
 add_action( 'wp_ajax_edd_custom_deliverables_send_email_ajax', 'edd_custom_deliverables_send_email_ajax' );
 add_action( 'wp_ajax_no_priv_edd_custom_deliverables_send_email_ajax', 'edd_custom_deliverables_send_email_ajax' );
+
+/**
+ * Turn on the file upload filter which tells files to upload to the edd directory
+ *
+ * @since 1.0
+ * @return void
+ */
+function edd_cd_turn_on_file_filter(){
+	$_SESSION['eddcd_upload_filter_enabled'] = true;
+}
+add_action( 'wp_ajax_edd_cd_turn_on_file_filter', 'edd_cd_turn_on_file_filter' );
+
+/**
+ * Turn off the file upload filter which tells files to upload to the edd directory
+ *
+ * @since 1.0
+ * @return void
+ */
+function edd_cd_turn_off_file_filter(){
+	$_SESSION['eddcd_upload_filter_enabled'] = false;
+}
+add_action( 'wp_ajax_edd_cd_turn_off_file_filter', 'edd_cd_turn_off_file_filter' );
