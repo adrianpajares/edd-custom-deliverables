@@ -207,10 +207,13 @@ add_filter( 'edd_log_file_download_file_id', 'edd_custom_deliverables_log_file_d
  * provides protection to anything uploaded to it.
  *
  * @since 1.0
- * @global $pagenow
  * @return void
  */
 function eddcd_change_downloads_upload_dir() {
+
+	if ( ! isset( $_GET['view'] ) ) {
+		return;
+	}
 
 	if ( 'view-order-details' == $_GET['view'] ) {
 		edd_create_protection_files( true );
