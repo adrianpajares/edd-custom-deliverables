@@ -211,13 +211,12 @@ add_filter( 'edd_log_file_download_file_id', 'edd_custom_deliverables_log_file_d
  */
 function eddcd_change_downloads_upload_dir() {
 
-	if ( ! isset( $_GET['view'] ) ) {
-		return;
+	// If the upload filter has been enabled
+	if ( isset( $_SESSION['eddcd_upload_filter_enabled'] ) && $_SESSION['eddcd_upload_filter_enabled'] ){
+
+			edd_create_protection_files( true );
+			add_filter( 'upload_dir', 'edd_set_upload_dir' );
 	}
 
-	if ( 'view-order-details' == $_GET['view'] ) {
-		edd_create_protection_files( true );
-		add_filter( 'upload_dir', 'edd_set_upload_dir' );
-	}
 }
 add_action( 'admin_init', 'eddcd_change_downloads_upload_dir', 999 );
