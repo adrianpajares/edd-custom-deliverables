@@ -130,25 +130,12 @@ class EDD_Custom_Deliverables_MetaBox {
 					<div class="edd-custom-deliverables-send-email-wrapper edd-admin-box-inside">
 						<h3><?php echo __( 'Notify Customer', 'edd-customized-deliverables' ); ?></h3>
 						<p>
-							<?php echo __( 'If you\'d like to send an email to the customer to let them know their files are ready to download, you can do so below. ', 'edd-custom-deliverables' ); ?>
+							<?php echo sprintf( __( 'If you\'d like to send an email to the customer to let them know their files are ready to download, you can do so below. Note that you can edit that email in the %s area.', 'edd-custom-deliverables' ), '<a href="' . admin_url( 'edit.php?post_type=download&page=edd-settings&tab=emails&section=edd-custom-deliverables-emails' ) . '">' . __( 'Email Settings', 'edd-custom-deliverables' ) . '</a>' ); ?>
 						</p>
 						<p>
-							<span class="label"><strong><?php echo __( 'Email Subject Line', 'edd-custom-deliverables' ); ?></strong></span><br />
-							<input type="text" class=" regular-text" id="edd-custom-deliverables-subject" name="edd-custom-deliverables-subject" value="<?php echo __( 'Your files are ready!', 'edd-custom-deliverables' ); ?>" placeholder="">
-						</p>
-						<p>
-							<span class="label"><strong><?php echo __( 'Email Body', 'edd-custom-deliverables' ); ?></strong></span>
-							<?php echo wp_editor( __( 'Dear {name},
-
-Your files are ready to download for your order {payment_id}.
-You can download them here: {download_list}', 'edd_custom_deliverables_body' ), 'edd-custom-deliverables-email-body', array( 'textarea_rows' => 9, 'wpautop' => true ) ); ?>
-						</p>
-						<p>
-							<?php $notify_button_text = __( 'Send Email', 'edd-custom-deliverables' ); ?><span class="button-secondary" id="edd-custom-deliverables-email-customer" data-payment="<?php echo $payment_id; ?>"><?php echo $notify_button_text; ?></span>
+							<?php $notify_button_text = __( 'Notify Customer', 'edd-custom-deliverables' ); ?><span class="button-secondary" id="edd-custom-deliverables-email-customer" data-payment="<?php echo $payment_id; ?>"><?php echo $notify_button_text; ?></span>
 							<span class="spinner"></span>
 						</p>
-						<?php echo __( 'HTML is accepted. Available template tags:', 'edd-custom-deliverables' ) . '<br />' . edd_get_emails_tags_list(); ?>
-
 						<?php wp_nonce_field( 'edd-custom-deliverables-send-email', 'edd-custom-deliverables-send-email', false, true ); ?>
 						<input type="hidden" id="edd-custom-deliverables-payment-id" name="edd-custom-deliverables-payment-id" value="<?php echo $payment_id; ?>">
 						</p>

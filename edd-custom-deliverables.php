@@ -103,6 +103,9 @@ if( !class_exists( 'EDD_Custom_Deliverables' ) ) {
 	  // Include Post Meta options
 	  require_once EDD_CUSTOM_DELIVERABLES_DIR . 'includes/admin/payment-meta/custom-deliverables-metabox.php';
 
+	  // Include global email settings
+	  require_once EDD_CUSTOM_DELIVERABLES_DIR . 'includes/admin/settings/email-settings/email-settings.php';
+
 	  // Integration with FES
 	  require_once EDD_CUSTOM_DELIVERABLES_DIR . 'includes/integrations/plugin-fes.php';
 
@@ -181,7 +184,7 @@ function edd_custom_deliverables() {
 	if ( ! defined( 'EDD_VERSION' ) || version_compare( EDD_VERSION, '2.8', '<' ) ){
 		add_action( 'admin_notices', 'edd_custom_deliverables_edd_too_old_notice' );
 	}
-	
+
 	if( ! class_exists( 'Easy_Digital_Downloads' ) ) {
 		if( ! class_exists( 'EDD_Extension_Activation' ) ) {
 		  require_once 'includes/updates/class.extension-activation.php';
