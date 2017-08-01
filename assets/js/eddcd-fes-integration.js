@@ -266,4 +266,108 @@ jQuery(document).ready(function ($) {
 	 	});
 	});
 
+	/**
+	 * Mark job as fulfilled upon click
+	 */
+	$( document ).on( 'click', '.eddcd-fulfill-order-btn', function( event ){
+
+		event.preventDefault();
+
+		fulfilled_box = $( this ).parent();
+
+		// Hide the Fulfill button
+		fulfilled_box.children().hide();
+
+		// Show the spinner
+		fulfilled_box.next().css( 'visibility', 'visible' ).css( 'display', 'inline-block' );
+
+		download_id = $(this).attr( 'download-id' );
+		price_id = $(this).attr( 'price-id' );
+
+		// Mark the job as fulfilled via ajax
+		$.ajax({
+	 		type: 'POST',
+	 		url: fes_form.ajaxurl,
+	 		data: {
+	 			nonce: $( '#edd-custom-deliverables-mark-as-fulfilled' ).val(),
+	 			download_id: download_id,
+	 			price_id: price_id,
+				payment_id: $( '#edd-custom-deliverables-payment-id' ).val(),
+	 			action: 'edd_custom_deliverables_mark_as_fulfilled',
+	 		},
+	 		dataType: "json",
+	 		success: function( response ) {
+
+				// If the job was not able to be marked as fulfilled
+	 			if ( ! response.success ){
+	 				console.log( response );
+	 			}else{
+
+					// Hide the spinner again
+					fulfilled_box.next().css( 'visibility', 'hidden' ).css( 'display', 'none' );
+
+					fulfilled_box.html( response.success_message );
+
+	 			}
+
+	 		}
+	 	}).fail(function (response) {
+	 		if ( window.console && window.console.log ) {
+	 			console.log( response );
+	 		}
+	 	});
+	});
+
+	/**
+	 * Mark job as not fulfilled upon click
+	 */
+	$( document ).on( 'click', '.eddcd-mark-not-fulfilled', function( event ){
+
+		event.preventDefault();
+
+		fulfilled_box = $( this ).parent().parent();
+
+		// Hide the previous Fullfilled By message
+		fulfilled_box.children().hide();
+
+		// Show the spinner
+		fulfilled_box.next().css( 'visibility', 'visible' ).css( 'display', 'inline-block' );
+
+		download_id = $(this).attr( 'download-id' );
+		price_id = $(this).attr( 'price-id' );
+
+		// Mark the job as unfulfilled via ajax
+		$.ajax({
+	 		type: 'POST',
+	 		url: fes_form.ajaxurl,
+	 		data: {
+	 			nonce: $( '#edd-custom-deliverables-mark-as-not-fulfilled' ).val(),
+	 			download_id: download_id,
+	 			price_id: price_id,
+				payment_id: $( '#edd-custom-deliverables-payment-id' ).val(),
+	 			action: 'edd_custom_deliverables_mark_as_not_fulfilled',
+	 		},
+	 		dataType: "json",
+	 		success: function( response ) {
+
+				// If the job was not able to be marked as fulfilled
+	 			if ( ! response.success ){
+	 				console.log( response );
+	 			}else{
+
+					// Hide the spinner again
+					fulfilled_box.next().css( 'visibility', 'hidden' ).css( 'display', 'none' );
+
+					fulfilled_box.html( response.success_message );
+
+	 			}
+
+	 		}
+	 	}).fail(function (response) {
+	 		if ( window.console && window.console.log ) {
+	 			console.log( response );
+	 		}
+	 	});
+	});
+
 });

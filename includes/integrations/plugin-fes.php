@@ -70,6 +70,8 @@ class EDD_Custom_Deliverables_Fes {
 		$payment = new EDD_Payment( $payment_id );
 		$available_files = $payment->get_meta( '_eddcd_custom_deliverables_available_files', true );
 		$custom_deliverables = $payment->get_meta( '_eddcd_custom_deliverables_custom_files', true );
+		$fulfilled_jobs = $payment->get_meta( '_eddcd_custom_deliverables_fulfilled_jobs', true );
+		$user = wp_get_current_user();
 
 		// Check if Custom Deliverables form data was just updated. If so, run the save function
 		if ( isset( $_POST['eddcd_fes_save_field'] ) ){
@@ -113,9 +115,9 @@ class EDD_Custom_Deliverables_Fes {
 
 				?><div id="edd-custom-deliverables-files-<?php echo $download_id; ?>-<?php echo $price_id; ?>" class="eddcd_repeatable_table"><?php
 
-					?><span class="label"><?php echo __( 'Customized files for', 'edd-custom-deliverables' ) . ' ' . $cart_item['name']; ?></span><?php
+					?><h3 class="eddcd-purchased-download-title"><?php echo __( 'Customized files for', 'edd-custom-deliverables' ) . ' "' . $cart_item['name']; ?>"</h3>
 
-					?><div class="eddcd-file-fields eddcd-repeatables-wrap"><?php
+					<div class="eddcd-file-fields eddcd-repeatables-wrap"><?php
 
 						// Get the custom files attached to this payment for this product
 						$custom_download_files = isset( $custom_deliverables[$download_id][$price_id] ) ? $custom_deliverables[$download_id][$price_id] : array();
@@ -155,6 +157,24 @@ class EDD_Custom_Deliverables_Fes {
 						<div class="eddcd-add-repeatable-row">
 							<div class="submit" style="float: none; clear:both; background: #fff;">
 								<button class="button-secondary eddcd_add_repeatable" download-id="<?php echo $download_id; ?>" price-id="<?php echo $price_id; ?>"><?php _e( 'Add New File', 'edd-custom-deliverables' ); ?></button>
+								<div class="eddcd-fulfillment-area"><?php
+
+									// If this job has not been fulfilled, output the button to fulfill it
+									if ( ! isset( $fulfilled_jobs[$download_id][$price_id] ) ){
+										?><button class="button-secondary eddcd-fulfill-order-btn" download-id="<?php echo $download_id; ?>" price-id="<?php echo $price_id; ?>"><?php echo __( 'Mark job as fulfilled', 'edd-custom-deliverables' ); ?></button><?php
+
+										wp_nonce_field( 'edd-custom-deliverables-mark-as-fulfilled', 'edd-custom-deliverables-mark-as-fulfilled', false, true );
+									}else{
+
+										// If this job has been fulfilled, output the fulfilled message
+										echo '<div class="eddcd_fulfilled_message_box">';
+											echo __( 'Fullfilled on', 'edd_custom_deliverables' ) . ' ' . date( 'F d, Y, h:ia', $fulfilled_jobs[$download_id][$price_id] ) . ' ' . __( 'by', 'edd-custom-deliverables' ) . ' ' . $user->display_name;
+											echo ' <a class="eddcd-mark-not-fulfilled" download-id="' . $download_id . '" price-id="' . $price_id . '">' . __( '(Mark as not fulfilled)', 'edd-custom-deliverables' ) . '</a>';
+										echo '</div>';
+										wp_nonce_field( 'edd-custom-deliverables-mark-as-not-fulfilled', 'edd-custom-deliverables-mark-as-not-fulfilled', false, true );
+									}?>
+								</div>
+								<span class="spinner" style="float:none;"></span>
 							</div>
 						</div>
 					</div>

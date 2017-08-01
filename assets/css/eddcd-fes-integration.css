@@ -135,6 +135,12 @@
 .eddcd_upload_field {
 	padding-right: 8em;
 }
+.eddcd-fulfillment-area, .eddcd_add_repeatable{
+	display:inline-block;
+}
+#eddcd_fes_submit{
+	margin-top:20px;
+}
 
 /* Email/Notify Customer Styles
 -------------------------------------------------------------- */
