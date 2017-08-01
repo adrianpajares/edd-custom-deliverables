@@ -68,6 +68,8 @@ function edd_custom_deliverables_mark_as_fulfilled(){
 	// Update the fulfilled jobs meta
 	edd_update_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
 
+	edd_custom_deliverables_check_for_full_fulfillment( $payment, $fulfilled_jobs );
+
 	ob_start();
 
 	echo '<div class="eddcd_fulfilled_message_box">';
@@ -145,6 +147,8 @@ function edd_custom_deliverables_mark_as_not_fulfilled(){
 
 	// Update the fulfilled jobs meta
 	edd_update_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
+
+	edd_custom_deliverables_check_for_full_fulfillment( $payment, $fulfilled_jobs );
 
 	ob_start();
 
@@ -290,3 +294,39 @@ function edd_cd_turn_off_file_filter(){
 	$_SESSION['eddcd_upload_filter_enabled'] = false;
 }
 add_action( 'wp_ajax_edd_cd_turn_off_file_filter', 'edd_cd_turn_off_file_filter' );
+
+/**
+ * Check if an entire payment has been fulfilled and save it accordingly (true or false)
+ *
+ * @since 1.0
+ * @param object $payment
+ * @return void
+ */
+function edd_custom_deliverables_check_for_full_fulfillment( $payment, $fulfilled_jobs ){
+
+	// Set default to true
+	$all_jobs_fulfilled = true;
+
+	// Check if all jobs have been fulfilled - Loop through the purchased items
+	foreach( $payment->cart_details as $cart_key => $cart_item ){
+
+		// Get the download if of this purchased product
+		$purchased_download_id = $cart_item['id'];
+
+		// Get the purchased price ID
+		$purchased_price_id = isset( $cart_item['item_number']['options']['price_id'] ) ? $cart_item['item_number']['options']['price_id'] : 0;
+
+		// Check if this product has not been fulfilled
+		if ( ! isset( $fulfilled_jobs[$purchased_download_id][$purchased_price_id] ) ){
+			$all_jobs_fulfilled = false;
+		}
+
+	}
+
+	// If all jobs have been fulfilled, set the status of the fulfillment to true
+	if ( $all_jobs_fulfilled ){
+		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', true );
+	}else{
+		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', false );
+	}
+}
