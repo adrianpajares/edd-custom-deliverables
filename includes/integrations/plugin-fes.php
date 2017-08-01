@@ -412,7 +412,7 @@ class EDD_Custom_Deliverables_Fes {
 
 		$sanitized_values = apply_filters( 'edd_custom_deliverables_pre_files_save', $custom_deliverables, $payment->ID );
 
-		edd_update_payment_meta( $payment->ID, '_eddcd_custom_deliverables_custom_files', $sanitized_values );
+		$payment->update_meta( '_eddcd_custom_deliverables_custom_files', $sanitized_values );
 
 		return $sanitized_values;
 	}
