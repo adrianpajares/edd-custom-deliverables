@@ -21,8 +21,6 @@ function edd_custom_deliverables_mark_as_fulfilled(){
 
 	if ( ! isset( $_POST['payment_id'] ) || ! isset( $_POST['download_id'] ) || ! isset( $_POST['price_id'] ) || ! isset( $_POST['nonce'] ) ){
 
-		print_r( $_POST );
-
 		echo json_encode( array(
 			'success' => false,
 			'failure_code' => 'data_missing',
@@ -55,7 +53,7 @@ function edd_custom_deliverables_mark_as_fulfilled(){
 	$user = wp_get_current_user();
 
 	// Get the existing data for fulfilled jobs for this payment
-	$fulfilled_jobs = edd_get_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', true );
+	$fulfilled_jobs = $payment->get_meta( '_eddcd_custom_deliverables_fulfilled_jobs', true );
 
 	// Make sure its an array if this is a brand new save
 	if ( empty( $fulfilled_jobs ) || ! is_array( $fulfilled_jobs ) ){
@@ -66,7 +64,7 @@ function edd_custom_deliverables_mark_as_fulfilled(){
 	$fulfilled_jobs[$download_id][$price_id] = time();
 
 	// Update the fulfilled jobs meta
-	edd_update_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
+	$payment->update_meta( '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
 
 	edd_custom_deliverables_check_for_full_fulfillment( $payment, $fulfilled_jobs );
 
@@ -135,7 +133,7 @@ function edd_custom_deliverables_mark_as_not_fulfilled(){
 	$user = wp_get_current_user();
 
 	// Get the existing data for fulfilled jobs for this payment
-	$fulfilled_jobs = edd_get_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', true );
+	$fulfilled_jobs = $payment->get_meta( '_eddcd_custom_deliverables_fulfilled_jobs', true );
 
 	// Make sure its an array if this is a brand new save
 	if ( empty( $fulfilled_jobs ) || ! is_array( $fulfilled_jobs ) ){
@@ -146,7 +144,7 @@ function edd_custom_deliverables_mark_as_not_fulfilled(){
 	unset( $fulfilled_jobs[$download_id][$price_id] );
 
 	// Update the fulfilled jobs meta
-	edd_update_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
+	$payment->update_meta( '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
 
 	edd_custom_deliverables_check_for_full_fulfillment( $payment, $fulfilled_jobs );
 
@@ -325,8 +323,8 @@ function edd_custom_deliverables_check_for_full_fulfillment( $payment, $fulfille
 
 	// If all jobs have been fulfilled, set the status of the fulfillment to true
 	if ( $all_jobs_fulfilled ){
-		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', 2 );
+		$payment->update_meta( '_eddcd_fulfillment_status', 2 );
 	}else{
-		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', 1 );
+		$payment->update_meta( '_eddcd_fulfillment_status', 1 );
 	}
 }
