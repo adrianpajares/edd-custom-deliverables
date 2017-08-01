@@ -325,8 +325,8 @@ function edd_custom_deliverables_check_for_full_fulfillment( $payment, $fulfille
 
 	// If all jobs have been fulfilled, set the status of the fulfillment to true
 	if ( $all_jobs_fulfilled ){
-		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', true );
+		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', 2 );
 	}else{
-		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', false );
+		edd_update_payment_meta( $payment->ID, '_eddcd_fulfillment_status', 1 );
 	}
 }

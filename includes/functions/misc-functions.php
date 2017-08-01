@@ -251,6 +251,28 @@ function edd_custom_deliverables_add_sortable_column( $columns ) {
 add_filter( 'edd_payments_table_sortable_columns', 'edd_custom_deliverables_add_sortable_column' );
 
 /**
+ * Sort payment history by fulfillment status
+ *
+ * @since 1.0
+ *
+ * @access public
+ * @return array
+ */
+function edd_custom_deliverables_sort_payments( $args ) {
+
+	if( isset( $_GET['orderby'] ) && $_GET['orderby'] == 'eddcd_fulfilled' ) {
+
+		$args['orderby'] = 'meta_value';
+		$args['meta_key'] = '_eddcd_fulfillment_status';
+
+	}
+
+	return $args;
+
+}
+add_filter( 'edd_get_payments_args', 'edd_custom_deliverables_sort_payments' );
+
+/**
  * The value for the "Fulfilled" column for each payment.
  *
  * @since 1.0
@@ -263,9 +285,11 @@ add_filter( 'edd_payments_table_sortable_columns', 'edd_custom_deliverables_add_
 function edd_custom_deliverables_fulfilled_column_value( $value = '', $payment_id = 0, $column_name = '' ){
 	if( $column_name == 'eddcd_fulfilled' ) {
 		$fulfillment_status = get_post_meta( $payment_id, '_eddcd_fulfillment_status', true );
-		if( ! $fulfillment_status ) {
+		$fulfillment_status = empty( $fulfillment_status ) ? 1 : $fulfillment_status;
+
+		if( 1 == $fulfillment_status ) {
 			$value = __( 'No', 'edd-custom-deliverables' );
-		} elseif( $fulfillment_status ) {
+		} elseif( 2 == $fulfillment_status ) {
 			$value = __( 'Yes', 'edd-custom-deliverables' );
 		} else {
 			$value = __( 'N/A', 'edd-custom-deliverables' );
