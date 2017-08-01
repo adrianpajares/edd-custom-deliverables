@@ -10,6 +10,164 @@
 // Exit if accessed directly
 if( !defined( 'ABSPATH' ) ) exit;
 
+
+/**
+ * Mark an order as "fulfilled" via ajax
+ *
+ * @since 1.0
+ * @return void
+ */
+function edd_custom_deliverables_mark_as_fulfilled(){
+
+	if ( ! isset( $_POST['payment_id'] ) || ! isset( $_POST['download_id'] ) || ! isset( $_POST['price_id'] ) || ! isset( $_POST['nonce'] ) ){
+
+		print_r( $_POST );
+
+		echo json_encode( array(
+			'success' => false,
+			'failure_code' => 'data_missing',
+			'failure_message' => __( 'There was data missing so the job could not be marked as fulfilled', 'edd-custom-deliverables' )
+		) );
+
+		die();
+	}
+
+	$nonce = $_POST['nonce'];
+
+	if ( ! wp_verify_nonce( $nonce, 'edd-custom-deliverables-mark-as-fulfilled' ) ){
+		echo json_encode( array(
+			'success' => false,
+			'failure_code' => 'security_failure',
+			'failure_message' => __( 'There was a problem with the security check.', 'edd-custom-deliverables' )
+		) );
+
+		die();
+	}
+
+	// Get the Payment ID
+	$payment_id = intval( $_POST['payment_id'] );
+	$payment = new EDD_Payment( $payment_id );
+
+	// Get the download and price ids
+	$download_id = intval( $_POST['download_id'] );
+	$price_id = intval( $_POST['price_id'] );
+
+	$user = wp_get_current_user();
+
+	// Get the existing data for fulfilled jobs for this payment
+	$fulfilled_jobs = edd_get_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', true );
+
+	// Make sure its an array if this is a brand new save
+	if ( empty( $fulfilled_jobs ) || ! is_array( $fulfilled_jobs ) ){
+		$fulfilled_jobs = array();
+	}
+
+	// Mark this job as complete by saving the timestamp
+	$fulfilled_jobs[$download_id][$price_id] = time();
+
+	// Update the fulfilled jobs meta
+	edd_update_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
+
+	ob_start();
+
+	echo '<div class="eddcd_fulfilled_message_box">';
+		echo __( 'Fullfilled on', 'edd_custom_deliverables' ) . ' ' . date( 'F d, Y, h:ia', time() ) . ' ' . __( 'by', 'edd-custom-deliverables' ) . ' ' . $user->display_name;
+		echo ' <a class="eddcd-mark-not-fulfilled" download-id="' . $download_id . '" price-id="' . $price_id . '">' . __( '(Mark as not fulfilled)', 'edd-custom-deliverables' ) . '</a>';
+	echo '</div>';
+	wp_nonce_field( 'edd-custom-deliverables-mark-as-not-fulfilled', 'edd-custom-deliverables-mark-as-not-fulfilled', false, true );
+
+	$output = ob_get_clean();
+
+	// Return the timestamp
+	echo json_encode( array(
+		'success' => true,
+		'success_message' => $output
+	) );
+
+	die();
+
+}
+add_action( 'wp_ajax_edd_custom_deliverables_mark_as_fulfilled', 'edd_custom_deliverables_mark_as_fulfilled' );
+
+/**
+ * Mark an order as "fulfilled" via ajax
+ *
+ * @since 1.0
+ * @return void
+ */
+function edd_custom_deliverables_mark_as_not_fulfilled(){
+
+	if ( ! isset( $_POST['payment_id'] ) || ! isset( $_POST['download_id'] ) || ! isset( $_POST['price_id'] ) || ! isset( $_POST['nonce'] ) ){
+
+		print_r( $_POST );
+
+		echo json_encode( array(
+			'success' => false,
+			'failure_code' => 'data_missing',
+			'failure_message' => __( 'There was data missing so the email could not be sent', 'edd-custom-deliverables' )
+		) );
+
+		die();
+	}
+
+	$nonce = $_POST['nonce'];
+
+	if ( ! wp_verify_nonce( $nonce, 'edd-custom-deliverables-mark-as-not-fulfilled' ) ){
+		echo json_encode( array(
+			'success' => false,
+			'failure_code' => 'security_failure',
+			'failure_message' => __( 'There was a problem with the security check.', 'edd-custom-deliverables' )
+		) );
+
+		die();
+	}
+
+	// Get the Payment ID
+	$payment_id = intval( $_POST['payment_id'] );
+	$payment = new EDD_Payment( $payment_id );
+
+	// Get the download and price ids
+	$download_id = intval( $_POST['download_id'] );
+	$price_id = intval( $_POST['price_id'] );
+
+	$user = wp_get_current_user();
+
+	// Get the existing data for fulfilled jobs for this payment
+	$fulfilled_jobs = edd_get_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', true );
+
+	// Make sure its an array if this is a brand new save
+	if ( empty( $fulfilled_jobs ) || ! is_array( $fulfilled_jobs ) ){
+		$fulfilled_jobs = array();
+	}
+
+	// Mark this job as not complete by removing the variable key for it
+	unset( $fulfilled_jobs[$download_id][$price_id] );
+
+	// Update the fulfilled jobs meta
+	edd_update_payment_meta( $payment_id, '_eddcd_custom_deliverables_fulfilled_jobs', $fulfilled_jobs );
+
+	ob_start();
+
+	?>
+	<button class="button-secondary eddcd-fulfill-order-btn" download-id="<?php echo $download_id; ?>" price-id="<?php echo $price_id; ?>"><?php echo __( 'Mark job as fulfilled', 'edd-custom-deliverables' ); ?></button>
+	<?php
+
+	wp_nonce_field( 'edd-custom-deliverables-mark-as-fulfilled', 'edd-custom-deliverables-mark-as-fulfilled', false, true );
+
+	$output = ob_get_clean();
+
+	// Return the timestamp
+	echo json_encode( array(
+		'success' => true,
+		'success_message' => $output
+	) );
+
+	die();
+
+}
+add_action( 'wp_ajax_edd_custom_deliverables_mark_as_not_fulfilled', 'edd_custom_deliverables_mark_as_not_fulfilled' );
+
+
 /**
  * Send the custom deliverables email via ajax
  *

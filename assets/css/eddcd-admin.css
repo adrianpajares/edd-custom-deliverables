@@ -137,3 +137,23 @@
 #edd-custom-deliverables-email-successful-message{
 	line-height:2;
 }
+
+.edd-custom-deliverables-send-email-wrapper{
+	border-top:1px solid #eee;
+}
+#edd_custom_deliverables_customized_files_title{
+	padding: 3px 12px;
+}
+.eddcd-purchased-download-title{
+	display:inline-block;
+	margin-right: 10px;
+    margin-top: 6px;
+}
+.eddcd-fulfillment-area{
+	display:inline-block;
+	margin-left:6px;
+}
+.eddcd_fulfilled_message_box{
+	display:inline-block;
+	margin-top: 5px;
+}
