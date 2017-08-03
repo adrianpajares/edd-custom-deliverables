@@ -219,3 +219,82 @@ function eddcd_change_downloads_upload_dir() {
 
 }
 add_action( 'admin_init', 'eddcd_change_downloads_upload_dir', 999 );
+
+/**
+ * Add a fulfilled status column to Payment History
+ *
+ * @since 1.0
+ *
+ * @return array
+ */
+function edd_custom_deliverables_add_fulfilled_column( $columns ) {
+	// Force the fulfilled column to be placed just before Status
+	unset( $columns['status'] );
+	$columns['eddcd_fulfilled'] = __( 'Fulfilled?', 'edd-custom-deliverables' );
+	$columns['status']  = __( 'Status', 'edd-custom-deliverables' );
+	return $columns;
+}
+add_filter( 'edd_payments_table_columns', 'edd_custom_deliverables_add_fulfilled_column' );
+
+/**
+ * Make the Fulfilled? column sortable
+ *
+ * @since 1.0
+ *
+ * @access public
+ * @return array
+ */
+function edd_custom_deliverables_add_sortable_column( $columns ) {
+	$columns['eddcd_fulfilled'] = array( 'eddcd_fulfilled', false );
+	return $columns;
+}
+add_filter( 'edd_payments_table_sortable_columns', 'edd_custom_deliverables_add_sortable_column' );
+
+/**
+ * Sort payment history by fulfillment status
+ *
+ * @since 1.0
+ *
+ * @access public
+ * @return array
+ */
+function edd_custom_deliverables_sort_payments( $args ) {
+
+	if( isset( $_GET['orderby'] ) && $_GET['orderby'] == 'eddcd_fulfilled' ) {
+
+		$args['orderby'] = 'meta_value';
+		$args['meta_key'] = '_eddcd_fulfillment_status';
+
+	}
+
+	return $args;
+
+}
+add_filter( 'edd_get_payments_args', 'edd_custom_deliverables_sort_payments' );
+
+/**
+ * The value for the "Fulfilled" column for each payment.
+ *
+ * @since 1.0
+ *
+ * @param string $value
+ * @param int    $payment_id
+ * @param string $column_name
+ * @return void
+ */
+function edd_custom_deliverables_fulfilled_column_value( $value = '', $payment_id = 0, $column_name = '' ){
+	if( $column_name == 'eddcd_fulfilled' ) {
+		$fulfillment_status = get_post_meta( $payment_id, '_eddcd_fulfillment_status', true );
+		$fulfillment_status = empty( $fulfillment_status ) ? 1 : $fulfillment_status;
+
+		if( 1 == $fulfillment_status ) {
+			$value = __( 'No', 'edd-custom-deliverables' );
+		} elseif( 2 == $fulfillment_status ) {
+			$value = __( 'Yes', 'edd-custom-deliverables' );
+		} else {
+			$value = __( 'N/A', 'edd-custom-deliverables' );
+		}
+	}
+	return $value;
+}
+add_filter( 'edd_payments_table_column', 'edd_custom_deliverables_fulfilled_column_value', 10, 3 );
