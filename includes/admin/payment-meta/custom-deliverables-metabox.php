@@ -30,9 +30,16 @@ class EDD_Custom_Deliverables_MetaBox {
 	public function custom_files_in_payment( $payment_id ) {
 
 		$payment = new EDD_Payment( $payment_id );
-		$available_files = $payment->get_meta( '_eddcd_custom_deliverables_available_files', true );
-		$custom_deliverables = $payment->get_meta( '_eddcd_custom_deliverables_custom_files', true );
-		$fulfilled_jobs = $payment->get_meta( '_eddcd_custom_deliverables_fulfilled_jobs', true );
+
+		// Get which files we should show, just custom files? Just default files? Both?
+		$available_files = edd_custom_deliverables_get_available_files_meta( $payment );
+
+		// Get our array of customized deliverable files for this payment
+		$custom_deliverables = edd_custom_deliverables_get_custom_files_meta( $payment );
+
+		// Get the array of fulfilled jobs in this payment
+		$fulfilled_jobs = edd_custom_deliverables_get_fulfilled_jobs_meta( $payment );
+
 		$user = wp_get_current_user();
 
 		?>

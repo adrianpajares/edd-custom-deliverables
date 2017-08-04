@@ -52,8 +52,9 @@ function edd_custom_deliverables_mark_as_fulfilled(){
 
 	$user = wp_get_current_user();
 
-	// Get the existing data for fulfilled jobs for this payment
-	$fulfilled_jobs = $payment->get_meta( '_eddcd_custom_deliverables_fulfilled_jobs', true );
+	// Get the array of fulfilled jobs in this payment
+	$fulfilled_jobs = edd_custom_deliverables_get_fulfilled_jobs_meta( $payment );
+
 
 	// Make sure its an array if this is a brand new save
 	if ( empty( $fulfilled_jobs ) || ! is_array( $fulfilled_jobs ) ){
@@ -132,8 +133,9 @@ function edd_custom_deliverables_mark_as_not_fulfilled(){
 
 	$user = wp_get_current_user();
 
-	// Get the existing data for fulfilled jobs for this payment
-	$fulfilled_jobs = $payment->get_meta( '_eddcd_custom_deliverables_fulfilled_jobs', true );
+	// Get the array of fulfilled jobs in this payment
+	$fulfilled_jobs = edd_custom_deliverables_get_fulfilled_jobs_meta( $payment );
+
 
 	// Make sure its an array if this is a brand new save
 	if ( empty( $fulfilled_jobs ) || ! is_array( $fulfilled_jobs ) ){
